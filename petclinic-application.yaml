@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/stepmanlau/helm.git
+    repoURL: https://github.com/stepmanlau/kustomize.git
     targetRevision: HEAD
     path: '.'
     helm:
