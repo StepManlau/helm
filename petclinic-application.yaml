@@ -3,22 +3,30 @@ kind: Application
 metadata:
   name: petclinic
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: spring-petclinic=ghcr.io/stepmanlau/spring-petclinic:~4.0
+    argocd-image-updater.argoproj.io/spring-petclinic.update-strategy: semver
+    argocd-image-updater.argoproj.io/spring-petclinic.helm.image-tag: image.tag
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues:/values_pp.yaml
 spec:
   project: default
   source:
-    repoURL: https://github.com/stepmanlau/kustomize.git
+    repoURL: https://github.com/stepmanlau/helm.git
     targetRevision: HEAD
     path: '.'
     helm:
+      valueFiles:
+      - values.yaml
+      - values_pp.yaml          # contient image.tag, édité par l'Image Updater
       parameters:
       - name: "app.contextPath"
-        value: "/tp9"
+        value: "/tp11"
   destination:
     server: https://kubernetes.default.svc
-    namespace: tp9-argocd
+    namespace: tp11-updater
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
